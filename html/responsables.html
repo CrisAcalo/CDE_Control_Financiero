@@ -27,14 +27,13 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
 
-    <title>Ingresos</title>
+    <title>Responsables</title>
   </head>
   <body>
     <!-- IDENTIFICADOR DE TIPO DE DATO -->
-    <input type="hidden" value="Categorias" id="tipoDato" />
+    <input type="hidden" value="Responsables" id="tipoDato" />
 
     <div class="frame_principal_container">
-
       <div class="card mb-3">
         <div class="card-header text-bg-primary">
           <h1>Responsables</h1>
@@ -42,22 +41,22 @@
         <div class="card-body">
           <form action="" onsubmit="event.preventDefault()" id="formIngreso">
             <div class="input-group mb-3">
-              <label class="input-group-text" for="nombreCategoria_C_Ingresos_N"
+              <label class="input-group-text" for="nombreResponsable_C_N"
                 >Nombre</label
               >
               <input
-                id="nombreCategoria_C_Ingresos_N"
-                name="nombreCategoria_C_Ingresos_N"
-                aria-describedby="nombreCategoria_C_Ingresos_N"
+                id="nombreResponsable_C_N"
+                name="nombreResponsable_C_N"
+                aria-describedby="nombreResponsable_C_N"
                 type="text"
                 class="form-control"
-                placeholder="Ingrese el nombre de la nueva categoría"
+                placeholder="Ingrese el nombre del nuevo responsable"
                 oninput="validateIngreso(this);"
               />
               <button
                 type="submit"
                 class="btn btn-primary"
-                onclick="validarCategoria('C','Ingresos','N')"
+                onclick="validarResponsable('C','N','')"
               >
                 Añadir
               </button>
@@ -67,7 +66,7 @@
 
           <div
             class="contenedorCategorias d-flex flex-column"
-            id="mostrarCategoriasIngresos"
+            id="mostrarResponsables"
           ></div>
         </div>
       </div>

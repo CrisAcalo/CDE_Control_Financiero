@@ -3,10 +3,31 @@ var tipoDatoAOperar = "";
 document.addEventListener("DOMContentLoaded", function () {
   tipoDatoAOperar = document.getElementById("tipoDato").value;
   if (tipoDatoAOperar == "Ingresos" || tipoDatoAOperar == "Egresos") {
+    selectCategoriasInput = document.querySelector("#categoriaIngresoC_N");
+    let categorias =
+      JSON.parse(localStorage.getItem(`Categorias${tipoDatoAOperar}`)) || [];
+
+    categorias.forEach(function (datoCategoria, index) {
+      selectCategoriasInput.innerHTML += `
+      <option value="${datoCategoria.nombre}">${datoCategoria.nombre}</option>
+    `;
+    });
+
+    selectCategoriasInput = document.querySelector("#responsableIngresoC_N");
+    let responsables = JSON.parse(localStorage.getItem(`Responsables`)) || [];
+
+    responsables.forEach(function (datoResponsable, index) {
+      selectCategoriasInput.innerHTML += `
+      <option value="${datoResponsable.nombre}">${datoResponsable.nombre}</option>
+    `;
+    });
+
     mostrarIngresos();
-  } else {
+  } else if (tipoDatoAOperar == "Categorias") {
     mostrarCategorias("Ingresos");
     mostrarCategorias("Egresos");
+  } else if (tipoDatoAOperar == "Responsables") {
+    mostrarResponsable();
   }
 
   document.querySelector("#fechaIngresoC_N").setAttribute("max", actualDate);
@@ -48,6 +69,8 @@ function mostrarIngresos() {
 
   let categoriasGuardadas =
     JSON.parse(localStorage.getItem(`Categorias${tipoDatoAOperar}`)) || [];
+  let responsablesGuardados =
+    JSON.parse(localStorage.getItem(`Responsables`)) || [];
 
   var mostrarDatosBodyTable = document.getElementById("mostrarDatos");
 
@@ -55,7 +78,9 @@ function mostrarIngresos() {
 
   datosGuardados.forEach(function (dato, index) {
     let CategoriasOptions = "";
+    let ResponsablesOptions = "";
     let categoriaActual = dato.categoria;
+    let responsableActual = dato.responsable;
 
     categoriasGuardadas.forEach(function (datoCategoria, index) {
       if (datoCategoria.nombre == categoriaActual) {
@@ -65,6 +90,18 @@ function mostrarIngresos() {
       } else {
         CategoriasOptions += `
       <option value="${datoCategoria.nombre}">${datoCategoria.nombre}</option>
+    `;
+      }
+    });
+
+    responsablesGuardados.forEach(function (datoResponsable, index) {
+      if (datoResponsable.nombre == responsableActual) {
+        ResponsablesOptions += `
+        <option selected value="${datoResponsable.nombre}">${datoResponsable.nombre}</option>
+      `;
+      } else {
+        ResponsablesOptions += `
+      <option value="${datoResponsable.nombre}">${datoResponsable.nombre}</option>
     `;
       }
     });
@@ -90,7 +127,7 @@ function mostrarIngresos() {
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
       >
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="background:#ffffff00">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="staticBackdropLabel">
@@ -202,9 +239,7 @@ function mostrarIngresos() {
                     required
                   >
                     <option value="" selected>-- Elegir --</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    ${ResponsablesOptions}
                   </select>
                   <div class="invalid-feedback">Este campo es obligatorio</div>
                 </div>
@@ -525,7 +560,176 @@ function mostrarCategorias(tipoCategoria) {
                 <button
                   type="submit"
                   class="btn btn-primary"
-                  onclick="validarCategoria('U','${tipoCategoria}', ${index},'${dato.nombre}');"
+                  onclick="validarCategoria('U', ${index},'${dato.nombre}');"
+                  >Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+        `;
+  });
+}
+
+function validarResponsable(operation, index, prevValue) {
+  let nombre = document.querySelector(
+    `#nombreResponsable_${operation}_${index}`
+  );
+
+  if (nombre.value == "") {
+    nombre.classList.add("is-invalid");
+    nombre.focus();
+  } else {
+    nombre.classList.remove("is-invalid");
+    // Obtener datos existentes del almacenamiento local
+    if (operation == "C") {
+      let datosGuardados =
+        JSON.parse(localStorage.getItem(`${tipoDatoAOperar}`)) || [];
+
+      // Agregar nuevos datos
+      datosGuardados.push({
+        nombre: nombre.value,
+      });
+
+      // Guardar en el almacenamiento local
+      localStorage.setItem(
+        `${tipoDatoAOperar}`,
+        JSON.stringify(datosGuardados)
+      );
+      nombre.value = "";
+    } else if (operation == "U") {
+      updateResponsable(index, nombre, prevValue);
+    }
+
+    // Mostrar datos
+    mostrarResponsable();
+  }
+}
+
+function updateResponsable(index, nombre, prevValue) {
+  let responsablesGuardados =
+    JSON.parse(localStorage.getItem(`${tipoDatoAOperar}`)) || [];
+
+  var datosIngresos = JSON.parse(localStorage.getItem("Ingresos")) || [];
+  var datosEgresos = JSON.parse(localStorage.getItem("Egresos")) || [];
+
+  datosIngresos.forEach(function (dato, index) {
+    if (dato.responsable == prevValue) {
+      dato.responsable = nombre.value;
+    }
+  });
+
+  datosEgresos.forEach(function (dato, index) {
+    if (dato.responsable == prevValue) {
+      dato.responsable = nombre.value;
+    }
+  });
+
+  // Guardar Datos de Ingresos/Egresos en el almacenamiento local
+  localStorage.setItem("Ingresos", JSON.stringify(datosIngresos));
+  localStorage.setItem("Egresos", JSON.stringify(datosEgresos));
+
+  // Actualizar datos en la posición 'index'
+  responsablesGuardados[index].nombre = nombre.value;
+
+  // Guardar Responsables en el almacenamiento local
+  localStorage.setItem(
+    `${tipoDatoAOperar}`,
+    JSON.stringify(responsablesGuardados)
+  );
+  window.location.reload();
+}
+
+function eliminarResponsable(index) {
+  var datosGuardados =
+    JSON.parse(localStorage.getItem(`${tipoDatoAOperar}`)) || [];
+  datosGuardados.splice(index, 1);
+  localStorage.setItem(`${tipoDatoAOperar}`, JSON.stringify(datosGuardados));
+
+  mostrarResponsable();
+}
+
+function mostrarResponsable() {
+  var datosGuardados =
+    JSON.parse(localStorage.getItem(`${tipoDatoAOperar}`)) || [];
+
+  var mostrarDatosBodyTable = document.querySelector(`#mostrarResponsables`);
+
+  mostrarDatosBodyTable.innerHTML = "";
+
+  datosGuardados.forEach(function (dato, index) {
+    mostrarDatosBodyTable.innerHTML += `
+      <div class="d-flex justify-content-between categoria_element">
+        <span>${dato.nombre}</span>
+
+        <div>
+          <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#responsableModalEdit${index}"><i class="bi bi-pencil-square"></i></button>
+          <button class="btn btn-sm btn-danger" onclick="eliminarResponsable(${index})"><i class="bi bi-trash3-fill"></i></button>
+        </div>
+      </div>
+
+
+      <div
+      class="modal fade"
+      id="responsableModalEdit${index}"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Editar Responsable
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form action="" onsubmit="event.preventDefault()" id="formUpdateResponsable_${index}">
+              <div class="modal-body">
+                
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="nombreResponsable_U_${index}">Nombre</label>
+                  <input
+                    id="nombreResponsable_U_${index}"
+                    name="nombreResponsable_U_${index}"
+                    aria-describedby="nombreResponsable_U_${index}"
+                    type="text"
+                    class="form-control"
+                    placeholder="Nombre de la Categoría"
+                    title="Ingrese el nuevo nombre del responsable"
+                    oninput="validateIngreso(this);"
+                    value="${dato.nombre}"
+                    required
+                  />
+                </div>
+
+                <div class="input-group mb-3">
+                  <input type="hidden" id="form_invalidU_${index}" class="form-control" />
+                  <div class="invalid-feedback">Hay campos obligatorios sin llenar</div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onclick="validarResponsable('U', ${index},'${dato.nombre}');"
                   >Guardar
                 </button>
               </div>
