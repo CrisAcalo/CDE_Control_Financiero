@@ -1,0 +1,8 @@
+.toggle_button_container{
+    display: block;
+}
+
+.table_ingresos_container{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}

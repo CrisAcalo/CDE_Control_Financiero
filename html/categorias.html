@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/phone.css" media="(min-width: 500px)" />
+    <link
+      rel="stylesheet"
+      href="../css/tablet.css"
+      media="(min-width: 768px)"
+    />
+    <link
+      rel="stylesheet"
+      href="../css/desktop.css"
+      media="(min-width: 1024px)"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <title>Ingresos</title>
+  </head>
+  <body>
+    <!-- IDENTIFICADOR DE TIPO DE DATO -->
+    <input type="hidden" value="Categorias" id="tipoDato" />
+
+    <div class="frame_principal_container">
+      <h1 class="title mb-4">Categorías</h1>
+
+      <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card mb-3">
+            <div class="card-header text-bg-primary">
+              <span>Ingresos</span>
+            </div>
+            <div class="card-body">
+              <form
+                action=""
+                onsubmit="event.preventDefault()"
+                id="formIngreso"
+              >
+                <div class="input-group mb-3">
+                  <label
+                    class="input-group-text"
+                    for="nombreCategoria_C_Ingresos_N"
+                    >Nombre</label
+                  >
+                  <input
+                    id="nombreCategoria_C_Ingresos_N"
+                    name="nombreCategoria_C_Ingresos_N"
+                    aria-describedby="nombreCategoria_C_Ingresos_N"
+                    type="text"
+                    class="form-control"
+                    placeholder="Ingrese el nombre de la nueva categoría"
+                    oninput="validateIngreso(this);"
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-success"
+                    onclick="validarCategoria('C','Ingresos','N')"
+                  >
+                    Añadir
+                  </button>
+                  <div class="invalid-feedback">Este campo es Obligatorio</div>
+                </div>
+              </form>
+
+              <div
+                class="contenedorCategorias d-flex flex-column"
+                id="mostrarCategoriasIngresos"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card mb-3">
+            <div class="card-header text-bg-primary">Egresos</div>
+            <div class="card-body">
+              <form
+                action=""
+                onsubmit="event.preventDefault()"
+                id="formIngreso"
+              >
+                <div class="input-group mb-3">
+                  <label
+                    class="input-group-text"
+                    for="nombreCategoria_C_Egresos_N"
+                    >Nombre</label
+                  >
+                  <input
+                    id="nombreCategoria_C_Egresos_N"
+                    name="nombreCategoria_C_Egresos_N"
+                    aria-describedby="nombreCategoria_C_Egresos_N"
+                    type="text"
+                    class="form-control"
+                    placeholder="Ingrese el nombre de la nueva categoría"
+                    oninput="validateIngreso(this);"
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-success"
+                    onclick="validarCategoria('C','Egresos','N')"
+                  >
+                    Añadir
+                  </button>
+                  <div class="invalid-feedback">Este campo es Obligatorio</div>
+                </div>
+              </form>
+
+              <div
+                class="contenedorCategorias d-flex flex-column"
+                id="mostrarCategoriasIngresos"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/style.js"></script>
+  </body>
+</html>

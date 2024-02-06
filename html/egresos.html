@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/phone.css" media="(min-width: 500px)" />
+    <link
+      rel="stylesheet"
+      href="../css/tablet.css"
+      media="(min-width: 768px)"
+    />
+    <link
+      rel="stylesheet"
+      href="../css/desktop.css"
+      media="(min-width: 1024px)"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <title>Egresos</title>
+  </head>
+  <body>
+    <!-- IDENTIFICADOR DE TIPO DE DATO -->
+    <input type="hidden" value="Egresos" id="tipoDato">
+
+    <div class="frame_principal_container">
+      <h1 class="title">Egresos</h1>
+
+      <!-- Button trigger modal -->
+      <button
+        type="button"
+        class="btn btn-primary my-3"
+        data-bs-toggle="modal"
+        data-bs-target="#ingresoModal"
+      >
+        <i class="bi bi-plus-circle me-2"></i>Añadir Egreso
+      </button>
+
+      <!-- Modal Ingreso -->
+      <div
+        class="modal fade"
+        id="ingresoModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Nuevo Egreso
+              </h1>
+
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form
+              action=""
+              onsubmit="event.preventDefault()"
+              id="formIngreso"
+            >
+              <div class="modal-body">
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="fechaIngresoC_N"
+                    >Fecha*</label
+                  >
+                  <input
+                    id="fechaIngresoC_N"
+                    name="fechaIngresoC_N"
+                    aria-describedby="fechaIngresoC_N"
+                    type="date"
+                    class="form-control campoFecha"
+                    oninput="validateIngreso(this)"
+                    required
+                  />
+                  <div class="invalid-feedback">Este campo es obligatorio</div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="descripcionIngresoC_N"
+                    >Descripción</label
+                  >
+                  <input
+                    id="descripcionIngresoC_N"
+                    name="descripcionIngresoC_N"
+                    aria-describedby="descripcionIngresoC_N"
+                    type="text"
+                    class="form-control"
+                    placeholder="Sueldo de horas extra"
+                  />
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="montoIngresoC_N"
+                    >$</label
+                  >
+                  <input
+                    id="montoIngresoC_N"
+                    name="montoIngresoC_N"
+                    aria-describedby="montoIngresoC_N"
+                    type="text"
+                    class="form-control"
+                    placeholder="3250.22"
+                    title="ingrese un formato válido. Ej: 3240.22"
+                    oninput="validateIngreso(this);validarMontoInput(this,'N')"
+                    required
+                  />
+                  <label class="input-group-text" for="montoIngresoC_N"
+                    >Monto*</label
+                  >
+                  <div class="alerts_monto_container">
+                    <div class="text-danger" id="validacion_monto_1_N">
+                      Este campo es obligatorio.
+                    </div>
+                    <div class="text-danger" id="validacion_monto_2_N">
+                      Use el formato adecuado (00000.00).
+                    </div>
+                    <div class="text-danger" id="validacion_monto_3_N">
+                      Debe ser un valor mayor que 0
+                    </div>
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="categoriaIngresoC_N"
+                    >Categoría*</label
+                  >
+                  <select
+                    class="form-select"
+                    id="categoriaIngresoC_N"
+                    name="categoriaIngresoC_N"
+                    oninput="validateIngreso(this)"
+                    required
+                  >
+                    <option value="" selected>-- Elegir --</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+                  <div class="invalid-feedback">Este campo es obligatorio</div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <input
+                    type="hidden"
+                    id="form_invalidC_N"
+                    class="form-control"
+                  />
+                  <div class="invalid-feedback">
+                    Llenar todos los campos por favor
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onclick="validateCamposIngreso('create','N');"
+                >
+                  Agregar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="table_ingresos_container">
+        <table class="table table-bordered table_ingresos">
+          <thead>
+            <tr>
+              <th class="bg-primary text-light">Fecha</th>
+              <th class="bg-primary text-light">Descripción</th>
+              <th class="bg-primary text-light">Monto</th>
+              <th class="bg-primary text-light">Categoría</th>
+              <th class="bg-primary text-light">Option</th>
+            </tr>
+          </thead>
+          <tbody id="mostrarDatos"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/style.js"></script>
+  </body>
+</html>

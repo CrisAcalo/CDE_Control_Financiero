@@ -1,0 +1,24 @@
+.main_container {
+    grid-template-columns: 120px auto;
+    transition: all 0.2s;
+}
+
+.slider_hamburguer_icon{
+    display: none;
+}
+
+.slider_container{
+    position: relative;
+    left: 0;
+}
+
+.toggle_button_container{
+    display: block;
+}
+
+
+/* CLASES GENERALES */
+
+.rezise_grid_slider_open{
+    grid-template-columns: 250px auto;
+}
