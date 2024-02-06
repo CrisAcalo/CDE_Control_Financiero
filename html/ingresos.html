@@ -31,8 +31,8 @@
   </head>
   <body>
     <!-- IDENTIFICADOR DE TIPO DE DATO -->
-    <input type="hidden" value="Ingresos" id="tipoDato">
-    
+    <input type="hidden" value="Ingresos" id="tipoDato" />
+
     <div class="frame_principal_container">
       <h1 class="title">Ingresos</h1>
 
@@ -70,11 +70,7 @@
                 aria-label="Close"
               ></button>
             </div>
-            <form
-              action=""
-              onsubmit="event.preventDefault()"
-              id="formIngreso"
-            >
+            <form action="" onsubmit="event.preventDefault()" id="formIngreso">
               <div class="modal-body">
                 <div class="input-group mb-3">
                   <label class="input-group-text" for="fechaIngresoC_N"
@@ -102,7 +98,7 @@
                     aria-describedby="descripcionIngresoC_N"
                     type="text"
                     class="form-control"
-                    placeholder="Sueldo de horas extra"
+                    placeholder="Ej: Sueldo de horas extra"
                   />
                 </div>
 
@@ -157,6 +153,25 @@
                 </div>
 
                 <div class="input-group mb-3">
+                  <label class="input-group-text" for="responsableIngresoC_N"
+                    >Responsable*</label
+                  >
+                  <select
+                    class="form-select"
+                    id="responsableIngresoC_N"
+                    name="responsableIngresoC_N"
+                    oninput="validateIngreso(this)"
+                    required
+                  >
+                    <option value="" selected>-- Elegir --</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+                  <div class="invalid-feedback">Este campo es obligatorio</div>
+                </div>
+
+                <div class="input-group mb-3">
                   <input
                     type="hidden"
                     id="form_invalidC_N"
@@ -195,8 +210,9 @@
             <tr>
               <th class="bg-primary text-light">Fecha</th>
               <th class="bg-primary text-light">Descripción</th>
-              <th class="bg-primary text-light">Monto</th>
               <th class="bg-primary text-light">Categoría</th>
+              <th class="bg-primary text-light">Responsable</th>
+              <th class="bg-primary text-light">Monto</th>
               <th class="bg-primary text-light">Option</th>
             </tr>
           </thead>

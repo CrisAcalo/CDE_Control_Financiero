@@ -56,7 +56,7 @@ a {
 
 .slider_container {
     background-color: var(--purple);
-    background-image: linear-gradient(180deg, var(--purple) 10%, rgb(27, 52, 126) 100%);
+    background-image: linear-gradient(180deg, var(--purple) 10%, rgb(23, 43, 105) 100%);
     background-size: cover;
     box-shadow: 1px 0px 15px var(--purple);
     color: #ffffff;

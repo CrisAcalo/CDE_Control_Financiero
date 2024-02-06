@@ -23,52 +23,64 @@ function formatoFecha(fecha, formato) {
   return formato.replace(/dd|mm|yy|yyy/gi, (matched) => map[matched]);
 }
 
-function guardarIngreso() {
-  let fecha = document.getElementById("fechaIngresoC_N").value;
-  let descripcion = document.getElementById("descripcionIngresoC_N").value;
-  let monto = document.getElementById("montoIngresoC_N").value;
-  let categoria = document.getElementById("categoriaIngresoC_N").value;
-
+function guardarIngreso(data) {
   // Obtener datos existentes del almacenamiento local
   let datosGuardados = JSON.parse(localStorage.getItem(tipoDatoAOperar)) || [];
 
   // Agregar nuevos datos
   datosGuardados.push({
-    fecha: fecha,
-    descripcion: descripcion,
-    monto: monto,
-    categoria: categoria,
+    fecha: data.fecha,
+    descripcion: data.descripcion,
+    monto: data.monto,
+    categoria: data.categoria,
+    responsable: data.responsable,
   });
 
   // Guardar en el almacenamiento local
   localStorage.setItem(tipoDatoAOperar, JSON.stringify(datosGuardados));
 
   // Mostrar datos
-  mostrarIngresos();
+  //mostrarIngresos();
 }
 
 function mostrarIngresos() {
   var datosGuardados = JSON.parse(localStorage.getItem(tipoDatoAOperar)) || [];
+
+  let categoriasGuardadas =
+    JSON.parse(localStorage.getItem(`Categorias${tipoDatoAOperar}`)) || [];
 
   var mostrarDatosBodyTable = document.getElementById("mostrarDatos");
 
   mostrarDatosBodyTable.innerHTML = "";
 
   datosGuardados.forEach(function (dato, index) {
+    let CategoriasOptions = "";
+    let categoriaActual = dato.categoria;
+
+    categoriasGuardadas.forEach(function (datoCategoria, index) {
+      if (datoCategoria.nombre == categoriaActual) {
+        CategoriasOptions += `
+        <option selected value="${datoCategoria.nombre}">${datoCategoria.nombre}</option>
+      `;
+      } else {
+        CategoriasOptions += `
+      <option value="${datoCategoria.nombre}">${datoCategoria.nombre}</option>
+    `;
+      }
+    });
+
     mostrarDatosBodyTable.innerHTML += `
         <tr>
             <td>${dato.fecha}</td>
             <td>${dato.descripcion}</td>
-            <td>${dato.monto}</td>
             <td>${dato.categoria}</td>
+            <td>${dato.responsable}</td>
+            <td>$ ${dato.monto}</td>
             <td>
                 <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ingresoModalEdit${index}">Editar</button>
                 <button class="btn btn-danger" onclick="eliminarIngreso(${index})">Eliminar</button>
             </td>
         </tr>
-        
-        
-
       <div
       class="modal fade"
       id="ingresoModalEdit${index}"
@@ -171,6 +183,25 @@ function mostrarIngresos() {
                     required
                   >
                     <option value="" selected>-- Elegir --</option>
+                    
+                    ${CategoriasOptions}
+                    
+                  </select>
+                  <div class="invalid-feedback">Este campo es obligatorio</div>
+                </div>
+                
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="responsableIngresoU_${index}"
+                    >Responsable*</label
+                  >
+                  <select
+                    class="form-select"
+                    id="responsableIngresoU_${index}"
+                    name="responsableIngresoU_${index}"
+                    oninput="validateIngreso(this)"
+                    required
+                  >
+                    <option value="" selected>-- Elegir --</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -217,6 +248,7 @@ function editarIngreso(newData, index) {
   datosGuardados[index].descripcion = newData.descripcion;
   datosGuardados[index].monto = newData.monto;
   datosGuardados[index].categoria = newData.categoria;
+  datosGuardados[index].responsable = newData.responsable;
 
   // Guardar en el almacenamiento local
   localStorage.setItem(tipoDatoAOperar, JSON.stringify(datosGuardados));
@@ -258,13 +290,14 @@ function validateCamposIngreso(operation, index) {
   const categoriaIngreso = document.querySelector(
     `#categoriaIngreso${idOperation}_${index}`
   );
+  const responsableIngreso = document.querySelector(
+    `#responsableIngreso${idOperation}_${index}`
+  );
 
-  const data = {
-    fecha: fechaIngreso.value,
-    monto: montoIngreso.value,
-    descripcion: descripcionIngreso.value,
-    categoria: categoriaIngreso.value,
-  };
+  if (responsableIngreso.value == "" || responsableIngreso.value == null) {
+    responsableIngreso.classList.add("is-invalid");
+    responsableIngreso.focus();
+  }
 
   if (categoriaIngreso.value == "" || categoriaIngreso.value == null) {
     categoriaIngreso.classList.add("is-invalid");
@@ -298,17 +331,26 @@ function validateCamposIngreso(operation, index) {
     fechaIngreso.focus();
   }
 
+  const data = {
+    fecha: fechaIngreso.value,
+    monto: montoIngreso.value,
+    descripcion: descripcionIngreso.value,
+    categoria: categoriaIngreso.value,
+    responsable: responsableIngreso.value,
+  };
+
   if (
     fechaIngreso.value == "" ||
     montoIngreso.value == "" ||
     categoriaIngreso.value == "" ||
+    responsableIngreso.value == "" ||
     montoIngreso.value <= 0
   ) {
     errorMessage.classList.add("is-invalid");
   } else {
     errorMessage.classList.remove("is-invalid");
     if (operation == "create") {
-      guardarIngreso();
+      guardarIngreso(data);
 
       // Cerrar el modal
       //const ingresoModal = new bootstrap.Modal(document.getElementById('ingresoModal'),null);
@@ -326,7 +368,7 @@ function validateCamposIngreso(operation, index) {
   }
 }
 
-function validarCategoria(operation, tipoCategoria, index) {
+function validarCategoria(operation, tipoCategoria, index, prevValue) {
   let nombre = document.querySelector(
     `#nombreCategoria_${operation}_${tipoCategoria}_${index}`
   );
@@ -338,7 +380,9 @@ function validarCategoria(operation, tipoCategoria, index) {
     // Obtener datos existentes del almacenamiento local
     if (operation == "C") {
       let datosGuardados =
-        JSON.parse(localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)) || [];
+        JSON.parse(
+          localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)
+        ) || [];
 
       // Agregar nuevos datos
       datosGuardados.push({
@@ -346,18 +390,13 @@ function validarCategoria(operation, tipoCategoria, index) {
       });
 
       // Guardar en el almacenamiento local
-      localStorage.setItem(`${tipoDatoAOperar}${tipoCategoria}`, JSON.stringify(datosGuardados));
-      nombre.value='';
+      localStorage.setItem(
+        `${tipoDatoAOperar}${tipoCategoria}`,
+        JSON.stringify(datosGuardados)
+      );
+      nombre.value = "";
     } else if (operation == "U") {
-      let datosGuardados =
-        JSON.parse(localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)) || [];
-
-      // Actualizar datos en la posición 'index'
-      datosGuardados[index].nombre = nombre.value;
-
-      // Guardar en el almacenamiento local
-      localStorage.setItem(`${tipoDatoAOperar}${tipoCategoria}`, JSON.stringify(datosGuardados));
-      window.location.reload();
+      updateCategoria(index, nombre, tipoCategoria, prevValue);
     }
 
     // Mostrar datos
@@ -365,17 +404,50 @@ function validarCategoria(operation, tipoCategoria, index) {
   }
 }
 
-function eliminarCategoria(tipoCategoria,index) {
-  var datosGuardados = JSON.parse(localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)) || [];
+function updateCategoria(index, nombre, tipoCategoria, prevValue) {
+  let categoriasGuardados =
+    JSON.parse(localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)) ||
+    [];
+
+  var datosGuardados = JSON.parse(localStorage.getItem(tipoCategoria)) || [];
+
+  datosGuardados.forEach(function (dato, index) {
+    if (dato.categoria == prevValue) {
+      dato.categoria = nombre.value;
+    }
+  });
+
+  // Guardar Datos de Ingresos/Egresos en el almacenamiento local
+  localStorage.setItem(tipoCategoria, JSON.stringify(datosGuardados));
+
+  // Actualizar datos en la posición 'index'
+  categoriasGuardados[index].nombre = nombre.value;
+
+  // Guardar Categorias en el almacenamiento local
+  localStorage.setItem(
+    `${tipoDatoAOperar}${tipoCategoria}`,
+    JSON.stringify(categoriasGuardados)
+  );
+  window.location.reload();
+}
+
+function eliminarCategoria(tipoCategoria, index) {
+  var datosGuardados =
+    JSON.parse(localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)) ||
+    [];
   datosGuardados.splice(index, 1);
-  localStorage.setItem(`${tipoDatoAOperar}${tipoCategoria}`, JSON.stringify(datosGuardados));
+  localStorage.setItem(
+    `${tipoDatoAOperar}${tipoCategoria}`,
+    JSON.stringify(datosGuardados)
+  );
 
   mostrarCategorias(tipoCategoria);
 }
 
-
 function mostrarCategorias(tipoCategoria) {
-  var datosGuardados = JSON.parse(localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)) || [];
+  var datosGuardados =
+    JSON.parse(localStorage.getItem(`${tipoDatoAOperar}${tipoCategoria}`)) ||
+    [];
 
   var mostrarDatosBodyTable = document.querySelector(
     `#mostrarCategorias${tipoCategoria}`
@@ -453,8 +525,8 @@ function mostrarCategorias(tipoCategoria) {
                 <button
                   type="submit"
                   class="btn btn-primary"
-                  onclick="validarCategoria('U','${tipoCategoria}', ${index});"
-                  >Agregar
+                  onclick="validarCategoria('U','${tipoCategoria}', ${index},'${dato.nombre}');"
+                  >Guardar
                 </button>
               </div>
             </form>
