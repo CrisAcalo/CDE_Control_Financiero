@@ -2,7 +2,6 @@ var actualDate = formatoFecha(new Date(Date.now()), "yy-mm-dd");
 var tipoDatoAOperar = "";
 document.addEventListener("DOMContentLoaded", function () {
   tipoDatoAOperar = document.getElementById("tipoDato").value;
-  console.log(tipoDatoAOperar);
   if (tipoDatoAOperar == "Ingresos" || tipoDatoAOperar == "Egresos") {
     mostrarIngresos();
   } else {
