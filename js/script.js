@@ -1,3 +1,67 @@
+class Persona {
+  constructor(nombre, fechanac, telefono, email) {
+    this.id = this.generarId();
+    this.nombre = nombre;
+    this.fechanac = fechanac;
+    this.telefono = telefono;
+    this.email = email;
+  }
+
+  // Método para generar un id aleatorio de 5 caracteres
+  generarId() {
+    const caracteres =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "";
+    for (let i = 0; i < 5; i++) {
+      const randomIndex = Math.floor(Math.random() * caracteres.length);
+      id += caracteres.charAt(randomIndex);
+    }
+    return id;
+  }
+
+  // Métodos get
+  getId() {
+    return this.id;
+  }
+
+  getNombre() {
+    return this.nombre;
+  }
+
+  getFechanac() {
+    return this.fechanac;
+  }
+
+  getTelefono() {
+    return this.telefono;
+  }
+
+  getEmail() {
+    return this.email;
+  }
+
+  // Métodos set
+  setId(id) {
+    this.id = id;
+  }
+
+  setNombre(nombre) {
+    this.nombre = nombre;
+  }
+
+  setFechanac(fechanac) {
+    this.fechanac = fechanac;
+  }
+
+  setTelefono(telefono) {
+    this.telefono = telefono;
+  }
+
+  setEmail(email) {
+    this.email = email;
+  }
+}
+
 var actualDate = formatoFecha(new Date(Date.now()), "yy-mm-dd");
 var tipoDatoAOperar = "";
 document.addEventListener("DOMContentLoaded", function () {
@@ -574,14 +638,68 @@ function mostrarCategorias(tipoCategoria) {
 }
 
 function validarResponsable(operation, index, prevValue) {
+  const regexCorreo =
+    /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
   let nombre = document.querySelector(
     `#nombreResponsable_${operation}_${index}`
   );
+  let fechaNacimiento = document.querySelector(
+    `#fechaNacResponsable_${operation}_${index}`
+  );
+  let email = document.querySelector(`#emailResponsable_${operation}_${index}`);
+  let telefono = document.querySelector(
+    `#telefonoResponsable_${operation}_${index}`
+  );
+  let invalidForm = document.querySelector(`#invalidForm`);
+
+  if (telefono.value == "" || telefono.value.length > 10) {
+    telefono.classList.add("is-invalid");
+    telefono.focus();
+  } else {
+    telefono.classList.remove("is-invalid");
+  }
+
+  if (email.value == "" || !regexCorreo.test(email.value)) {
+    email.classList.add("is-invalid");
+    email.focus();
+  } else {
+    email.classList.remove("is-invalid");
+  }
+
+  if (fechaNacimiento.value == "") {
+    fechaNacimiento.classList.add("is-invalid");
+    fechaNacimiento.focus();
+  } else {
+    fechaNacimiento.classList.remove("is-invalid");
+  }
 
   if (nombre.value == "") {
     nombre.classList.add("is-invalid");
     nombre.focus();
   } else {
+    nombre.classList.remove("is-invalid");
+  }
+
+  if (
+    nombre.value == "" ||
+    fechaNacimiento.value == "" ||
+    email.value == "" ||
+    !regexCorreo.test(email.value) ||
+    telefono.value == "" ||
+    telefono.value.length > 10
+  ) {
+    invalidForm.classList.add("is-invalid");
+  } else {
+    invalidForm.classList.remove("is-invalid");
+
+    let newPersona = new Persona(
+      nombre.value,
+      fechaNacimiento.value,
+      telefono.value,
+      email.value
+    );
+
     nombre.classList.remove("is-invalid");
     // Obtener datos existentes del almacenamiento local
     if (operation == "C") {
@@ -589,9 +707,7 @@ function validarResponsable(operation, index, prevValue) {
         JSON.parse(localStorage.getItem(`${tipoDatoAOperar}`)) || [];
 
       // Agregar nuevos datos
-      datosGuardados.push({
-        nombre: nombre.value,
-      });
+      datosGuardados.push(newPersona);
 
       // Guardar en el almacenamiento local
       localStorage.setItem(
@@ -599,8 +715,11 @@ function validarResponsable(operation, index, prevValue) {
         JSON.stringify(datosGuardados)
       );
       nombre.value = "";
-    } else if (operation == "U") {
-      updateResponsable(index, nombre, prevValue);
+      fechaNacimiento.value = "";
+      email.value = "";
+      telefono.value = "";
+    } else if (operation = "U") {
+      updateResponsable(index, newPersona, prevValue);
     }
 
     // Mostrar datos
@@ -661,15 +780,17 @@ function mostrarResponsable() {
 
   datosGuardados.forEach(function (dato, index) {
     mostrarDatosBodyTable.innerHTML += `
-      <div class="d-flex justify-content-between categoria_element">
-        <span>${dato.nombre}</span>
-
-        <div>
-          <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#responsableModalEdit${index}"><i class="bi bi-pencil-square"></i></button>
+    <tr>
+        <td>${dato.id}</td>
+        <td>${dato.nombre}</td>
+        <td>${dato.fechanac}</td>
+        <td>${dato.telefono}</td>
+        <td>$ ${dato.email}</td>
+        <td>
+        <!--<button class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#responsableModalEdit${index}"><i class="bi bi-pencil-square"></i></button>-->
           <button class="btn btn-sm btn-danger" onclick="eliminarResponsable(${index})"><i class="bi bi-trash3-fill"></i></button>
-        </div>
-      </div>
-
+        </td>
+    </tr>  
 
       <div
       class="modal fade"

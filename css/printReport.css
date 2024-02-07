@@ -17,7 +17,6 @@ h1.title {
 a {
     text-decoration: none;
 }
-
 .main_container {
     display: grid;
     grid-template-columns: 1;
@@ -67,23 +66,7 @@ a {
     position: fixed;
     left: -200px;
     z-index: 150;
-    overflow-y: auto;
 }
-
-.slider_container::-webkit-scrollbar {
-    width: 5px; /* ancho de toda la barra de desplazamiento */
-}
-
-.slider_container::-webkit-scrollbar-track {
-    background: rgba(255, 166, 0, 0); /* color del área de seguimiento */
-}
-
-.slider_container::-webkit-scrollbar-thumb {
-    background-color: #4368d7b4; /* color del botón de desplazamiento */
-    border-radius: 0px; /* redondez del botón de desplazamiento */
-    border: 3px solid rgba(255, 166, 0, 0); /* crea un borde alrededor del botón de desplazamiento */
-}
-
 
 .slider_title{
     font-size: 1rem;
@@ -99,7 +82,7 @@ a {
 
 .logo_container{
     width: 100%;
-    height: 120px;
+    height: 150px;
 }
 
 .slider_logo {
@@ -153,9 +136,9 @@ a {
 
 .toggle_button_container {
     background: #ffffff36;
-    width: 40px;
-    height: 40px;
-    padding: 10px;
+    width: 50px;
+    height: 50px;
+    padding: 17px;
     border-radius: 50%;
     margin: 20px auto;
     transition: all 0.1s;
@@ -217,7 +200,7 @@ a {
 
 .graphs_container div{
     border: 1px solid #3f3f3f00;
-    max-width: 500px;
+    max-width: 850px;
     width: 100%;
     height: max-content;
     border-radius: 8px;
@@ -245,8 +228,7 @@ a {
 }
 
 .graphs_container div canvas{
-    display: inline;
-    height: 50%;
+    height: 90%;
     margin: 0 auto;
 }
 
@@ -283,4 +265,33 @@ a {
     width: 100%;
     margin-top: 0.25rem;
     font-size: .875em;
+}
+
+.formRequestContainer{
+    display: none;
+}
+button.imprimirReporte,
+button.limpiarDatos{
+    display: none;
+}
+*{
+    padding: 0;
+    margin: 0;
+}
+
+h1{
+    display: none;
+}
+
+.table_ingresos_container{
+    font-size: 0.7rem;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.table_ingresos_container .table_ingresos,
+.report_header{
+    width: 100%;
+    min-width: 0;
+    max-width: 90vw;
 }

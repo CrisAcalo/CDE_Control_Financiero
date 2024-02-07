@@ -1,3 +1,67 @@
+function validarCorreo(inputElement) {
+  const correo = inputElement.value;
+
+  // Expresión regular para validar el formato de correo electrónico
+  const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+  if (regexCorreo.test(correo)) {
+    // El formato del correo es válido
+    inputElement.classList.remove('is-invalid');
+  } else {
+    // El formato del correo no es válido
+    inputElement.classList.add('is-invalid');
+  }
+}
+
+function validarAlfabeticos(inputElement) {
+  const valor = inputElement.value;
+
+  // Permitir borrar y teclas de flechas
+  if (/^[a-zA-Z\b]+$/.test(valor)) {
+      inputElement.classList.remove('is-invalid');
+  } else {
+      inputElement.value = valor.replace(/[^a-zA-Z]/g, ''); // Eliminar caracteres no alfabéticos
+      inputElement.classList.add('is-invalid');
+  }
+}
+
+function validarTelefono(input) {
+  let inputValue = input.value;
+  console.log(inputValue);
+  console.log(inputValue[0]);
+
+  if (input.value == "") {
+    input.classList.add("is-invalid");
+  } else {
+    input.classList.remove("is-invalid");
+  }
+
+  if (input.value[0] != 0 || input.value[1] != 9) {
+    input.classList.add("is-invalid");
+  } else {
+    input.classList.remove("is-invalid");
+  }
+
+  if (input.value.length > 10) {
+    input.classList.add("is-invalid");
+  } else {
+    input.classList.remove("is-invalid");
+  }
+
+  // Permitir borrar y teclas de flechas
+  if (/^[0-9\b]+$/.test(input.value)) {
+    // Validar la estructura del número de teléfono (iniciar con '09' y tener 10 dígitos)
+    if (!/^09[0-9]{8}$/.test(input.value)) {
+      input.classList.add("is-invalid");
+    } else {
+      input.classList.remove("is-invalid");
+    }
+  } else {
+    document.getElementById("telefonoResponsable_C_N").value =
+      inputValue.replace(/[^\d]/g, ""); // Eliminar caracteres no numéricos
+  }
+}
+
 let prevValue = "";
 
 function validarMontoInput(input, index) {

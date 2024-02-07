@@ -1,107 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/normalize.css" />
-    <link rel="stylesheet" href="./css/style.css" />
-    <link rel="stylesheet" href="./css/phone.css" media="(min-width: 500px)" />
-    <!-- <link rel="stylesheet" href="./css/tablet.css" media="(min-width: 768px)" /> -->
-
-    <link
-      rel="stylesheet"
-      href="./css/desktop.css"
-      media="(min-width: 1024px)"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
-    <title>Economic Administrator</title>
+    <title>Formulario de Inicio de Sesión</title>
+    <link rel="stylesheet" href="./css/login.css" />
   </head>
   <body>
-    <div class="main_container" id="main_container">
-      <div class="slider_container" id="slider">
-        <div class="logo_container">
-          <img class="slider_logo" src="./img/light_logo.png" alt="" />
-        </div>
-        <hr class="divider" />
-        <div class="slider_content_container">
-          <p class="slider_title">Económico</p>
-          <a
-            href="./html/ingresos.html"
-            target="content"
-            class="slider_element"
-          >
-            <div class="slider_element_content">
-              <i class="bi bi-arrow-down-left-square"></i>
-              <span>Ingresos</span>
-              <i class="bi bi-caret-right arrow_slider_element"></i>
-            </div>
-          </a>
+    <div class="login-container">
+      <h2>Iniciar Sesión</h2>
+      <form id="loginForm" onsubmit="event.preventDefault()">
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" name="username" oninput="validarAlfabeticos(this)" required />
 
-          <a href="./html/egresos.html" target="content" class="slider_element">
-            <div class="slider_element_content">
-              <i class="bi bi-arrow-up-right-square"></i>
-              <span>Egresos</span>
-              <i class="bi bi-caret-right arrow_slider_element"></i>
-            </div>
-          </a>
-        </div>
-        <hr class="divider" />
-        <p class="slider_title">Manejar</p>
-        
-        <a
-          href="./html/categorias.html"
-          target="content"
-          class="slider_element"
-        >
-          <div class="slider_element_content">
-            <i class="bi bi-list-task"></i>
-            <span>Categorías</span>
-            <i class="bi bi-caret-right arrow_slider_element"></i>
-          </div>
-        </a>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" required />
 
-        <a
-          href="./html/responsables.html"
-          target="content"
-          class="slider_element"
-        >
-          <div class="slider_element_content">
-            <i class="bi bi-list-columns"></i>
-            <span>Responsables</span>
-            <i class="bi bi-caret-right arrow_slider_element"></i>
-          </div>
-        </a>
-
-        <hr class="divider" />
-        <p class="slider_title">Generar</p>
-
-        <a href="./html/reportes.html" target="content" class="slider_element">
-          <div class="slider_element_content">
-            <i class="bi bi-graph-down-arrow"></i>
-            <span>Reportes</span>
-            <i class="bi bi-caret-right arrow_slider_element"></i>
-          </div>
-        </a>
-
-        <hr class="divider" />
-        <div class="toggle_button_container" id="toggle_button_container">
-          <i class="bi bi-caret-right-fill"></i>
-        </div>
-      </div>
-
-      <main>
-        <div class="nav">
-          <div class="slider_hamburguer_icon" id="slider_hamburguer_icon">
-            <i class="bi bi-list"></i>
-          </div>
-        </div>
-        <iframe class="iframe_content" name="content" title="Content"> </iframe>
-      </main>
+        <p class="error-message" id="errorMessage"></p>
+        <input
+          type="submit"
+          class="btn btn-primary"
+          value="Iniciar Sesión"
+          onclick="validateForm()"
+        />
+      </form>
     </div>
 
-    <script src="./js/slider.js"></script>
+    <script src="./js/login.js"></script>
   </body>
 </html>

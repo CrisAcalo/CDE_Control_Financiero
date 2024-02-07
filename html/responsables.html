@@ -27,7 +27,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
 
-    <title>Responsables</title>
+    <title>Personas</title>
   </head>
   <body>
     <!-- IDENTIFICADOR DE TIPO DE DATO -->
@@ -36,7 +36,7 @@
     <div class="frame_principal_container">
       <div class="card mb-3">
         <div class="card-header text-bg-primary">
-          <h1>Responsables</h1>
+          <h1>Personas</h1>
         </div>
         <div class="card-body">
           <form action="" onsubmit="event.preventDefault()" id="formIngreso">
@@ -51,23 +51,102 @@
                 type="text"
                 class="form-control"
                 placeholder="Ingrese el nombre del nuevo responsable"
-                oninput="validateIngreso(this);"
+                oninput="validarAlfabeticos(this);"
+                required
               />
-              <button
-                type="submit"
-                class="btn btn-primary"
-                onclick="validarResponsable('C','N','')"
-              >
-                Añadir
-              </button>
-              <div class="invalid-feedback">Este campo es Obligatorio</div>
-            </div>
-          </form>
 
-          <div
-            class="contenedorCategorias d-flex flex-column"
-            id="mostrarResponsables"
-          ></div>
+              <div class="invalid-feedback">Este campo es Obligatorio.<br>Se aceptan solo caracteres Alfabéticos.</div>
+            </div>
+
+            <!-- Agregar atributos de la clase Persona -->
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="fechaNacResponsable_C_N"
+                >Fecha de Nacimiento</label
+              >
+              <input
+                id="fechaNacResponsable_C_N"
+                name="fechaNacResponsable_C_N"
+                aria-describedby="fechaNacResponsable_C_N"
+                type="date"
+                class="form-control"
+                oninput="validateIngreso(this);"
+                required
+              />
+              <div class="invalid-feedback">Este campo es obligatorio</div>
+            </div>
+
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="emailResponsable_C_N"
+                >Correo Electrónico</label
+              >
+              <input
+                id="emailResponsable_C_N"
+                name="emailResponsable_C_N"
+                aria-describedby="emailResponsable_C_N"
+                type="email"
+                class="form-control"
+                placeholder="Ingrese el correo electrónico"
+                oninput="validarCorreo(this);"
+                required
+              />
+              <div class="invalid-feedback">
+                Este campo es obligatorio y debe ser una dirección de correo
+                válida
+              </div>
+            </div>
+
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="telefonoResponsable_C_N"
+                >Teléfono</label
+              >
+              <input
+                id="telefonoResponsable_C_N"
+                name="telefonoResponsable_C_N"
+                aria-describedby="telefonoResponsable_C_N"
+                type="text"
+                class="form-control"
+                placeholder="Ingrese el número de teléfono"
+                oninput="validarTelefono(this)"
+                pattern="[0-9]+"
+                required
+              />
+              <div class="invalid-feedback">
+                Este campo es obligatorio, debe contener solo números y tiene un
+                máximo de 10 dígitos
+              </div>
+            </div>
+
+            <div class="input-group mb-3">
+              <input id="invalidForm" type="hidden" />
+              <div class="invalid-feedback">
+                Todos los campos son obligatorios, complételos correctamente
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary mb-3"
+              onclick="validarResponsable('C','N','')"
+            >
+              Añadir
+            </button>
+          </form>
+          <!--  -->
+          <div class="table_ingresos_container">
+            <table class="table table-bordered table_ingresos">
+              <thead>
+                <tr>
+                  <th class="bg-primary text-light">ID</th>
+                  <th class="bg-primary text-light">Nombre</th>
+                  <th class="bg-primary text-light">Fecha de Nacimiento</th>
+                  <th class="bg-primary text-light">Teléfono</th>
+                  <th class="bg-primary text-light">Email</th>
+                  <th class="bg-primary text-light">Option</th>
+                </tr>
+              </thead>
+              <tbody id="mostrarResponsables"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
